@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        width: 80%;
+       margin: auto;
+    }
+    div {
+        width: 18%;
+        display: inline-block;
+        vertical-align: top;
+        margin: 30px;
+    }
+    input {
+        margin-top: 10px;
+    }
+
+    button {
+        margin-top: 10px;
+    }
+    
+</style>
+
+<body>
+    
+    <div>
+        <h1>Add User</h1>
+        <input type="number" id="id" placeholder="Id" />
+        <input type="text" id="name" placeholder="Name" />
+        <input type="number" id="age" placeholder="age" />
+        <button onclick="addUser()">Add User</button>
+    </div>
+
+    <div id="delete">
+        <h1>Delete User</h1>
+        <input type="number" id="user_id" placeholder="Id" />
+      <button onclick="deleteUser()">Delete User</button>
+    </div>
+</body>
+
+</html>
+
+<script>
+    async function getData() {
+        let res = await fetch(`http://localhost:5000/api/users`);
+        let dta = await res.json();
+        console.log("dta:", dta);
+    }
+    getData();
+
+    async function addUser() {
+        let data = {
+            id: document.getElementById("id").value,
+            name: document.getElementById("name").value,
+            age: document.getElementById("age").value,
+        };
+
+        try {
+            let res = await fetch(`http://localhost:5000/api/users`, {
+
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+            let d = await res.json();
+            console.log("d:", d);
+        }
+        catch (e) {
+            console.log("e:", e);
+        }
+    }
+
+    async function deleteUser(){
+        let id = document.getElementById("user_id").value;
+        let res = await fetch(`http://localhost:5000/api/users/${id}`,{
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+</script>
